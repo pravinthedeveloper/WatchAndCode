@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>Practical JavaScript</title>
+</head>
+
+<body>
+  <h1>Todo List</h1>
+
+  <div>
+    <button onclick="handlers.displayTodos()">Display Todos</button>
+    <button onclick="handlers.toggleAll()">Toggle All</button>
+  </div>
+
+  <div>
+    <button onclick="handlers.addToDo()">Add</button>
+    <input id="todoTextInput" type="text">
+  </div>
+
+  <div>
+    <button onclick="handlers.changeTodo()">Change todo</button>
+    <input type="number" id="changeTodoPositionInput">
+    <input type="text" id="changeTodoNewValueInput">
+  </div>
+
+  <div>
+    <button onclick="handlers.deleteTodo()">Delete</button>
+    <input type = "number" id="deleteTodoPositionInput">
+  </div>
+
+  <div>
+    <button onclick="handlers.toggleTodo()">Toggle Completed</button>
+    <input type="number" id="toggleCompletedTodoPositionInput">
+  </div>
+
+  <script>
+    var todoList = {
+      todos: [],
+      displayTodos: function() {
+        if (this.todos.length === 0) {
+          console.log('Your todolist is empty');
+        } else {
+          console.log('My Todos:');
+          for (var i = 0; i < this.todos.length; i++) {
+            //console.log(this.todos[i].todoText);
+
+            if (this.todos[i].completed === true) {
+              console.log('(x)', this.todos[i].todoText)
+            } else {
+              console.log('( )', this.todos[i].todoText)
+            }
+
+          }
+        }
+      },
+      addTodo: function(todo) {
+        this.todos.push({
+          todoText: todo,
+          completed: false
+        });
+        this.displayTodos();
+      },
+      changeTodo: function(position, todoText) {
+        this.todos[position].todoText = todoText;
+        this.displayTodos();
+      },
+      deleteTodo: function(position) {
+        this.todos.splice(position, 1);
+        this.displayTodos();
+      },
+      toggleCompleted: function(position) {
+        var todo = this.todos[position];
+        todo.completed = !todo.completed;
+        this.displayTodos();
+      },
+      toggleAll: function() {
+        var totalTodos = this.todos.length;
+        var completedTodos = 0;
+
+        for (var i = 0; i < totalTodos; i++) {
+          if (this.todos[i].completed === true) {
+            completedTodos++;
+          }
+        }
+        // if all are completed, then make all false
+        if (completedTodos === totalTodos) {
+          for (var i = 0; i < totalTodos; i++) {
+            this.todos[i].completed = false;
+          }
+        } else {
+          for (var i = 0; i < totalTodos; i++) {
+            this.todos[i].completed = true;
+          } 
+        } 
+       this.displayTodos();
+      }
+    };
+
+    var handlers = {
+      displayTodos: function() {
+        todoList.displayTodos();
+      },
+      addToDo: function() {
+        var addTodoTextInput = document.getElementById('todoTextInput');
+        todoList.addTodo(addTodoTextInput.value);
+        addTodoTextInput.value = '';
+      },
+      changeTodo: function() {
+        var changeTodoPositionInput = document.getElementById('changeTodoPositionInput');
+        var changeTodoNewValueInput = document.getElementById('changeTodoNewValueInput');
+        todoList.changeTodo(changeTodoPositionInput.valueAsNumber, changeTodoNewValueInput.value);
+        changeTodoPositionInput.value = '';
+        changeTodoNewValueInput.value = '';
+      },
+      deleteTodo: function() {
+        var deleteTodoPositionInput = document.getElementById('deleteTodoPositionInput');
+        todoList.deleteTodo(deleteTodoPositionInput.valueAsNumber);
+        deleteTodoPositionInput.value = '';
+      },
+      toggleTodo: function() {
+        var toggleCompletedTodoPositionInput = document.getElementById("toggleCompletedTodoPositionInput");
+        todoList.toggleCompleted(toggleCompletedTodoPositionInput.valueAsNumber);
+        toggleCompletedTodoPositionInput.value = '';
+      },
+      toggleAll: function() {
+        todoList.toggleAll();
+      }
+    };
+  </script>
+
+</body>
+
+</html>
